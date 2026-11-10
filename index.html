@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Pencatatan Jamu Kunyit Asem</title>
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1E3E4E',   // Dark Teal / Navy
+            accent: '#F9A826',    // Soft Orange / Peach
+            bgLight: '#F8F9FA',
+            inputBg: '#F1F3F5',
+            warn: '#E53E3E',
+            softGreen: '#38A169',
+          },
+          borderRadius: {
+            'card': '20px',
+            'input': '12px',
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          }
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #F8F9FA;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .custom-shadow {
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(2px);
+    }
+    .btn-touch {
+      min-height: 48px;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-12 flex justify-center text-gray-800">
+
+  <!-- Container Mobile Max-W -->
+  <div class="w-full max-w-md px-4 pt-4 pb-8 flex flex-col space-y-4">
+
+    <!-- 1. HEADER SAPAAN -->
+    <header class="flex justify-between items-start pt-2">
+      <div>
+        <h1 class="text-xl font-bold text-primary leading-tight">Halo, Ibu! 🌿</h1>
+        <p class="text-xs text-gray-500 font-medium" id="todayText">Memuat tanggal...</p>
+      </div>
+      <div class="bg-white p-2 rounded-full custom-shadow text-primary flex items-center justify-center">
+        <button onclick="resetDataSemua()" title="Reset Data Aplikasi" class="text-gray-400 hover:text-red-500 transition-colors p-0.5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. KARTU MENU FITUR UTAMA DI ATAS (Menggantikan Taskbar Bawah) -->
+    <section>
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-sm font-bold text-primary uppercase tracking-wide">Menu Fitur Utama</h2>
+        <span class="text-xs text-accent font-semibold">Sentuh untuk buka</span>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <!-- Fitur 1: Tambah Stok Bahan Baku -->
+        <button onclick="openStockModal()" class="bg-white rounded-card p-2.5 custom-shadow flex flex-col items-center justify-center text-center active:scale-95 transition-transform border border-emerald-100 hover:border-emerald-300">
+          <div class="w-11 h-11 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-primary leading-tight">+ Stok Bahan</span>
+        </button>
+
+        <!-- Fitur 2: Masak / Produksi Jamu -->
+        <button onclick="openProductionModal()" class="bg-white rounded-card p-2.5 custom-shadow flex flex-col items-center justify-center text-center active:scale-95 transition-transform border border-amber-100 hover:border-amber-300">
+          <div class="w-11 h-11 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mb-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-primary leading-tight">Masak Jamu</span>
+        </button>
+
+        <!-- Fitur 3: Catat Penjualan / Konsumsi -->
+        <button onclick="openSalesModal()" class="bg-white rounded-card p-2.5 custom-shadow flex flex-col items-center justify-center text-center active:scale-95 transition-transform border border-orange-100 hover:border-orange-300">
+          <div class="w-11 h-11 rounded-full bg-orange-50 text-accent flex items-center justify-center mb-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-primary leading-tight">Jual / Minum</span>
+        </button>
+
+        <!-- Fitur 4: Riwayat Aktivitas Lengkap -->
+        <button onclick="openHistoryModal()" class="bg-white rounded-card p-2.5 custom-shadow flex flex-col items-center justify-center text-center active:scale-95 transition-transform border border-sky-100 hover:border-sky-300">
+          <div class="w-11 h-11 rounded-full bg-sky-50 text-sky-600 flex items-center justify-center mb-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-primary leading-tight">Riwayat</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. HIGHLIGHT CARD (Dark Teal dengan Circular Indicator) -->
+    <section class="bg-primary text-white rounded-card p-5 custom-shadow relative overflow-hidden">
+      <div class="flex justify-between items-center relative z-10">
+        <div>
+          <span class="text-xs font-medium text-amber-200 uppercase tracking-wider">Produksi Minggu Ini</span>
+          <p id="weeklyLiters" class="text-3xl font-bold mt-1">0 Liter</p>
+          <p class="text-xs text-gray-300 mt-1" id="weeklyBottles">~0 botol 200ml</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16">
+            <svg viewBox="0 0 36 36" class="w-full h-full transform -rotate-90">
+              <path
+                class="text-gray-600"
+                stroke-width="3.5"
+                stroke="currentColor"
+                fill="none"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                id="progressCircle"
+                class="text-accent"
+                stroke-width="3.8"
+                stroke-dasharray="0, 100"
+                stroke-linecap="round"
+                stroke="currentColor"
+                fill="none"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span id="progressText" class="text-xs font-bold text-white">0%</span>
+            </div>
+          </div>
+          <span class="text-[10px] text-gray-300 mt-1">Target Mingguan</span>
+        </div>
+      </div>
+      <!-- Tombol cepat -->
+      <div class="mt-4 pt-3 border-t border-gray-600 flex justify-between items-center">
+        <span class="text-xs text-gray-300" id="totalSoldText">Terjual: 0 botol</span>
+        <button onclick="openHistoryModal()" class="text-xs font-semibold text-accent underline flex items-center gap-1">
+          Lihat Riwayat &rarr;
+        </button>
+      </div>
+    </section>
+
+    <!-- 4. RINGKASAN HARI INI (Grid 2x2) -->
+    <section>
+      <h2 class="text-sm font-bold text-primary mb-2 uppercase tracking-wide">Ringkasan Hari Ini</h2>
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Kartu 1: Sisa Jamu Siap Jual -->
+        <div class="bg-white rounded-card p-4 custom-shadow flex flex-col justify-between">
+          <div>
+            <div class="w-8 h-8 rounded-full bg-teal-50 text-primary flex items-center justify-center mb-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+            </div>
+            <h3 class="text-xs font-medium text-gray-500">Jamu Siap Jual</h3>
+            <p id="stockJamu" class="text-lg font-bold text-primary mt-1">0 L</p>
+          </div>
+          <p id="stockJamuBotol" class="text-[11px] text-gray-400 mt-1 font-medium">~0 botol siap saji</p>
+        </div>
+
+        <!-- Kartu 2: Sisa Stok Botol 200ml -->
+        <div class="bg-white rounded-card p-4 custom-shadow flex flex-col justify-between">
+          <div>
+            <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+              </svg>
+            </div>
+            <h3 class="text-xs font-medium text-gray-500">Kemasan Botol</h3>
+            <p id="stockBotol" class="text-lg font-bold text-primary mt-1">0 pcs</p>
+          </div>
+          <p id="statusBotol" class="text-[11px] text-emerald-600 mt-1 font-semibold">Stok Aman</p>
+        </div>
+
+        <!-- Kartu 3: Status Stok Bahan Baku -->
+        <div class="bg-white rounded-card p-4 custom-shadow flex flex-col justify-between">
+          <div>
+            <div class="w-8 h-8 rounded-full bg-red-50 text-warn flex items-center justify-center mb-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+            </div>
+            <h3 class="text-xs font-medium text-gray-500">Bahan Menipis</h3>
+            <p id="lowStockCount" class="text-sm font-bold text-emerald-600 mt-1">Semua Aman</p>
+          </div>
+          <p id="lowStockNames" class="text-[10px] text-gray-400 mt-1 truncate">Stok mencukupi</p>
+        </div>
+
+        <!-- Kartu 4: Shortcut Masak Jamu Soft Orange -->
+        <button onclick="openProductionModal()" class="bg-[#FFF4E6] rounded-card p-4 custom-shadow flex flex-col justify-between text-left border border-amber-200 active:scale-95 transition-transform">
+          <div>
+            <div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center mb-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <h3 class="text-xs font-semibold text-accent">Mulai Masak</h3>
+            <p class="text-xs text-gray-600 mt-1 font-medium">Buat Batch Jamu Baru</p>
+          </div>
+          <span class="text-[11px] font-bold text-accent mt-2 flex items-center gap-1">
+            Buka Form &rarr;
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 5. DAFTAR SISA STOK BAHAN BAKU REAL-TIME -->
+    <section class="bg-white rounded-card p-4 custom-shadow">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-sm font-bold text-primary uppercase tracking-wide">Sisa Bahan Baku Saat Ini</h2>
+        <button onclick="openStockModal()" class="text-xs font-bold text-accent underline">+ Tambah</button>
+      </div>
+      <div id="bahanListGrid" class="space-y-2">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- 6. DAFTAR BATCH PRODUKSI AKTIF (SIAP JUAL) -->
+    <section class="bg-white rounded-card p-4 custom-shadow">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-sm font-bold text-primary uppercase tracking-wide">Batch Jamu Siap Jual</h2>
+        <button onclick="openSalesModal()" class="text-xs font-bold text-accent underline">Catat Jual</button>
+      </div>
+      <div id="batchActiveList" class="space-y-2">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+  </div> <!-- End Container -->
+
+
+  <!-- ==================== MODAL 1: TAMBAH STOK BAHAN BAKU ==================== -->
+  <div id="stockModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Tambah Stok Bahan</h2>
+          <p class="text-xs text-gray-500">Catat belanjaan bahan atau botol</p>
+        </div>
+        <button onclick="closeStockModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="stockForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">PILIH BAHAN / KEMASAN</label>
+          <select id="stockBahanSelect" class="w-full bg-inputBg rounded-input p-3 text-sm font-medium focus:ring-2 focus:ring-accent outline-none" required>
+            <!-- Diisi otomatis oleh JavaScript -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">JUMLAH TAMBAHAN</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" id="stockJumlah" min="1" step="any" placeholder="Misal: 1000 atau 50" class="flex-1 bg-inputBg rounded-input p-3 text-base font-semibold focus:ring-2 focus:ring-accent outline-none" required>
+            <span id="stockSatuanLabel" class="text-sm font-bold text-primary px-2">satuan</span>
+          </div>
+          <!-- Tombol pintas -->
+          <div class="flex gap-2 mt-2">
+            <button type="button" onclick="addStockQuick(100)" class="px-2.5 py-1 text-xs bg-gray-100 rounded-lg font-medium text-gray-600">+100</button>
+            <button type="button" onclick="addStockQuick(500)" class="px-2.5 py-1 text-xs bg-gray-100 rounded-lg font-medium text-gray-600">+500</button>
+            <button type="button" onclick="addStockQuick(1000)" class="px-2.5 py-1 text-xs bg-gray-100 rounded-lg font-medium text-gray-600">+1.000</button>
+            <button type="button" onclick="addStockQuick(50)" class="px-2.5 py-1 text-xs bg-gray-100 rounded-lg font-medium text-gray-600">+50 (Botol)</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">CATATAN (OPSIONAL)</label>
+          <input type="text" id="stockCatatan" placeholder="Contoh: Beli di Pasar Beringharjo" class="w-full bg-inputBg rounded-input p-3 text-sm focus:ring-2 focus:ring-accent outline-none">
+        </div>
+
+        <button type="submit" id="btnSubmitStock" class="w-full btn-touch bg-accent hover:bg-amber-500 text-white font-bold rounded-input shadow-md active:scale-98 transition">
+          Simpan Tambah Stok
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 2: PRODUKSI / MASAK JAMU ==================== -->
+  <div id="prodModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Masak Jamu (Batch Baru)</h2>
+          <p class="text-xs text-gray-500">Stok bahan terpotong sesuai resep masak ini</p>
+        </div>
+        <button onclick="closeProductionModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="productionForm" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TANGGAL MASAK</label>
+          <input type="date" id="prodDate" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-medium focus:ring-2 focus:ring-accent outline-none" required>
+        </div>
+
+        <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-input space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-amber-900">Bahan Terpakai untuk Masak Ini</span>
+            <span class="text-[10px] text-amber-700">(Tidak harus habis semua)</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-700">Kunyit (gram)</label>
+              <input type="number" id="prodKunyit" min="0" placeholder="0" class="w-full bg-white rounded-input p-2 mt-0.5 border border-gray-200 text-sm font-semibold focus:ring-2 focus:ring-accent outline-none" required>
+              <span id="stockKunyitHint" class="text-[10px] text-gray-500">Sisa: -</span>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-700">Jahe (gram)</label>
+              <input type="number" id="prodJahe" min="0" placeholder="0" class="w-full bg-white rounded-input p-2 mt-0.5 border border-gray-200 text-sm font-semibold focus:ring-2 focus:ring-accent outline-none" required>
+              <span id="stockJaheHint" class="text-[10px] text-gray-500">Sisa: -</span>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-700">Asam Jawa (gram)</label>
+              <input type="number" id="prodAsam" min="0" placeholder="0" class="w-full bg-white rounded-input p-2 mt-0.5 border border-gray-200 text-sm font-semibold focus:ring-2 focus:ring-accent outline-none" required>
+              <span id="stockAsamHint" class="text-[10px] text-gray-500">Sisa: -</span>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-700">Gula Merah (gram)</label>
+              <input type="number" id="prodGula" min="0" placeholder="0" class="w-full bg-white rounded-input p-2 mt-0.5 border border-gray-200 text-sm font-semibold focus:ring-2 focus:ring-accent outline-none" required>
+              <span id="stockGulaHint" class="text-[10px] text-gray-500">Sisa: -</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">HASIL BERSIH JAMU (LITER)</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" step="0.1" min="0.1" id="prodLiter" placeholder="Misal: 10 atau 15.5" class="flex-1 bg-inputBg rounded-input p-3 text-base font-bold text-primary focus:ring-2 focus:ring-accent outline-none" required>
+            <span class="text-sm font-bold text-primary px-2">Liter</span>
+          </div>
+          <p id="estBotolHasil" class="text-xs text-emerald-600 font-semibold mt-1">Setara ~0 botol 200ml</p>
+        </div>
+
+        <button type="submit" id="btnSubmitProd" class="w-full btn-touch bg-accent hover:bg-amber-500 text-white font-bold rounded-input shadow-md active:scale-98 transition">
+          Simpan Hasil Masak Jamu
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 3: PENJUALAN / KONSUMSI KELUARGA ==================== -->
+  <div id="salesModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 id="modalSalesTitle" class="text-lg font-bold text-primary">Catat Penjualan Jamu</h2>
+          <p id="modalSalesDesc" class="text-xs text-gray-500">Mengurangi sisa liter batch & botol 200ml</p>
+        </div>
+        <button onclick="closeSalesModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="salesForm" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TIPE PEMAKAIAN</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" id="btnTypeJual" onclick="selectSaleType('penjualan')" class="p-2.5 rounded-input border-2 border-accent bg-orange-50 text-accent font-bold text-xs flex items-center justify-center gap-1">
+              💰 Penjualan (Jual)
+            </button>
+            <button type="button" id="btnTypeKonsumsi" onclick="selectSaleType('konsumsi')" class="p-2.5 rounded-input border border-gray-200 bg-gray-50 text-gray-600 font-semibold text-xs flex items-center justify-center gap-1">
+              ❤️ Minum Keluarga
+            </button>
+          </div>
+          <input type="hidden" id="saleType" value="penjualan">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TANGGAL TRANSAKSI</label>
+          <input type="date" id="saleDate" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-medium focus:ring-2 focus:ring-accent outline-none" required>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">PILIH BATCH PRODUKSI JAMU</label>
+          <select id="batchSelect" class="w-full bg-inputBg rounded-input p-2.5 text-xs font-semibold text-primary focus:ring-2 focus:ring-accent outline-none" required>
+            <!-- Diisi otomatis JavaScript -->
+          </select>
+          <p id="batchDetailInfo" class="text-[11px] text-gray-500 mt-1">Sisa di batch ini: -</p>
+        </div>
+
+        <!-- Input Khusus Penjualan: Pakai Kemasan Botol 200ml -->
+        <div id="sectionInputJual">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">JUMLAH BOTOL 200ML TERJUAL</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" id="saleBotol" min="1" placeholder="1" class="flex-1 bg-inputBg rounded-input p-3 text-lg font-bold text-primary focus:ring-2 focus:ring-accent outline-none">
+            <span class="text-sm font-bold text-primary px-1">Botol</span>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <button type="button" onclick="addBotolQuick(1)" class="flex-1 py-1 text-xs bg-gray-100 rounded-lg font-semibold text-gray-700 active:bg-accent active:text-white">+1</button>
+            <button type="button" onclick="addBotolQuick(5)" class="flex-1 py-1 text-xs bg-gray-100 rounded-lg font-semibold text-gray-700 active:bg-accent active:text-white">+5</button>
+            <button type="button" onclick="addBotolQuick(10)" class="flex-1 py-1 text-xs bg-gray-100 rounded-lg font-semibold text-gray-700 active:bg-accent active:text-white">+10</button>
+          </div>
+          <p id="literCalcInfo" class="text-[11px] text-amber-600 font-semibold mt-1">Mengurangi 0.2 Liter dari batch & 1 botol kemasan</p>
+        </div>
+
+        <!-- Input Khusus Konsumsi Keluarga: Minum Langsung (Liter / Gelas, TANPA Botol) -->
+        <div id="sectionInputKonsumsi" class="hidden">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">JUMLAH JAMU DIMINUM (LITER)</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" id="saleLiterKonsumsi" min="0.1" step="0.1" placeholder="0.2" class="flex-1 bg-inputBg rounded-input p-3 text-lg font-bold text-primary focus:ring-2 focus:ring-rose-500 outline-none">
+            <span class="text-sm font-bold text-rose-700 px-1">Liter</span>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5 mt-2">
+            <button type="button" onclick="setLiterKonsumsi(0.2)" class="py-1 text-[11px] bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-semibold border border-rose-200">1 Gelas<br>(0.2 L)</button>
+            <button type="button" onclick="setLiterKonsumsi(0.4)" class="py-1 text-[11px] bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-semibold border border-rose-200">2 Gelas<br>(0.4 L)</button>
+            <button type="button" onclick="setLiterKonsumsi(0.5)" class="py-1 text-[11px] bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-semibold border border-rose-200">1 Teko<br>(0.5 L)</button>
+            <button type="button" onclick="setLiterKonsumsi(1.0)" class="py-1 text-[11px] bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-semibold border border-rose-200">1 Liter<br>(1.0 L)</button>
+          </div>
+          <div class="mt-2.5 p-2.5 bg-emerald-50 rounded-lg border border-emerald-200 flex items-start gap-2">
+            <span class="text-sm">🛡️</span>
+            <p class="text-[11px] text-emerald-800 font-medium leading-snug">
+              <strong>Stok botol 200ml aman (tidak berkurang)</strong>, karena diminum langsung pakai gelas/cangkir sendiri.
+            </p>
+          </div>
+        </div>
+
+        <div id="sectionHargaJual">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TOTAL HARGA PENJUALAN (RP)</label>
+          <input type="number" id="saleHarga" min="0" step="500" placeholder="Rp 0" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-bold text-primary focus:ring-2 focus:ring-accent outline-none">
+          <span class="text-[10px] text-gray-400">Default perkiraan Rp 5.000 / botol</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">CATATAN</label>
+          <input type="text" id="saleKet" placeholder="Misal: Pesanan Bu Joko" class="w-full bg-inputBg rounded-input p-2.5 text-xs focus:ring-2 focus:ring-accent outline-none">
+        </div>
+
+        <button type="submit" id="btnSubmitSale" class="w-full btn-touch bg-accent hover:bg-amber-600 text-white font-bold rounded-input shadow-md active:scale-98 transition">
+          Simpan Penjualan
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 4: RIWAYAT AKTIVITAS ==================== -->
+  <div id="historyModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow max-h-[92vh] flex flex-col">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Riwayat Aktivitas</h2>
+          <p class="text-xs text-gray-500">Produksi, penjualan, dan stok</p>
+        </div>
+        <button onclick="closeHistoryModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="overflow-y-auto flex-1 pr-1 space-y-3" id="historyTimelineList">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== HYBRID LOCALSTORAGE / API ENGINE ==================== -->
+  <script>
+    const STORAGE_KEY = 'JAMU_KUNYIT_ASEM_DATA_V2';
+    const API_BASE = (window.location.protocol === 'http:' || window.location.protocol === 'https:') ? window.location.origin : null;
+
+    // Data Bersih Kosong (Stok 0, Tanpa Transaksi / Batch)
+    const DEFAULT_STORE = {
+      bahan: [
+        { id: 'kunyit', nama: 'Kunyit', satuan: 'gram', stok: 0, threshold: 500 },
+        { id: 'jahe', nama: 'Jahe', satuan: 'gram', stok: 0, threshold: 300 },
+        { id: 'asam', nama: 'Asam Jawa', satuan: 'gram', stok: 0, threshold: 250 },
+        { id: 'gula', nama: 'Gula Merah', satuan: 'gram', stok: 0, threshold: 500 },
+        { id: 'botol', nama: 'Botol 200ml', satuan: 'pcs', stok: 0, threshold: 20 }
+      ],
+      batches: [],
+      transaksi: [],
+      riwayat_stok: []
+    };
+
+    function resetDataSemua() {
+      if (confirm('Apakah Ibu yakin ingin mereset semua data kembali ke 0 (stok awal kosong)?')) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_STORE));
+        localStorage.removeItem('JAMU_KUNYIT_ASEM_DATA_V1');
+        alert('Data aplikasi berhasil direset bersih ke 0!');
+        refreshDashboard();
+      }
+    }
+
+    function loadLocalDB() {
+      try {
+        const str = localStorage.getItem(STORAGE_KEY);
+        if (str) return JSON.parse(str);
+      } catch (e) {}
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_STORE));
+      return JSON.parse(JSON.stringify(DEFAULT_STORE));
+    }
+
+    function saveLocalDB(data) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (e) {}
+    }
+
+    // Helper Tanggal
+    function formatDateIndo(dateStr) {
+      if (!dateStr) return '-';
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    const todayStr = new Date().toISOString().slice(0, 10);
+    document.getElementById('todayText').textContent = new Date().toLocaleDateString('id-ID', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    });
+    document.getElementById('prodDate').value = todayStr;
+    document.getElementById('saleDate').value = todayStr;
+
+    // Hitung botol saat user ketik liter di form masak
+    document.getElementById('prodLiter').addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value) || 0;
+      const btl = Math.round(val / 0.2);
+      document.getElementById('estBotolHasil').textContent = `Setara ~${btl} botol kemasan 200ml`;
+    });
+
+    // Hitung liter & estimasi harga di form penjualan
+    document.getElementById('saleBotol').addEventListener('input', () => {
+      updateSaleCalc();
+    });
+
+    function updateSaleCalc() {
+      const btl = parseInt(document.getElementById('saleBotol').value) || 0;
+      const ltr = (btl * 0.2).toFixed(1);
+      document.getElementById('literCalcInfo').textContent = `Mengurangi ${ltr} Liter dari batch & ${btl} botol kemasan 200ml`;
+      if (document.getElementById('saleType').value === 'penjualan') {
+        document.getElementById('saleHarga').value = btl * 5000;
+      }
+    }
+
+    function setLiterKonsumsi(ltr) {
+      document.getElementById('saleLiterKonsumsi').value = ltr;
+    }
+
+    function selectSaleType(type) {
+      document.getElementById('saleType').value = type;
+      const btnJual = document.getElementById('btnTypeJual');
+      const btnKonsumsi = document.getElementById('btnTypeKonsumsi');
+      const secJual = document.getElementById('sectionInputJual');
+      const secKonsumsi = document.getElementById('sectionInputKonsumsi');
+      const secHarga = document.getElementById('sectionHargaJual');
+      const modalTitle = document.getElementById('modalSalesTitle');
+      const modalDesc = document.getElementById('modalSalesDesc');
+      const btnSubmit = document.getElementById('btnSubmitSale');
+      const saleKet = document.getElementById('saleKet');
+
+      if (type === 'penjualan') {
+        btnJual.className = 'p-2.5 rounded-input border-2 border-accent bg-orange-50 text-accent font-bold text-xs flex items-center justify-center gap-1';
+        btnKonsumsi.className = 'p-2.5 rounded-input border border-gray-200 bg-gray-50 text-gray-600 font-semibold text-xs flex items-center justify-center gap-1';
+        secJual.classList.remove('hidden');
+        secKonsumsi.classList.add('hidden');
+        secHarga.classList.remove('hidden');
+        modalTitle.textContent = 'Catat Penjualan Jamu';
+        modalDesc.textContent = 'Mengurangi sisa liter batch & botol 200ml';
+        btnSubmit.textContent = 'Simpan Penjualan';
+        btnSubmit.className = 'w-full btn-touch bg-accent hover:bg-amber-600 text-white font-bold rounded-input shadow-md active:scale-98 transition';
+        saleKet.placeholder = 'Misal: Pesanan Bu Joko (5 botol)';
+        updateSaleCalc();
+      } else {
+        btnKonsumsi.className = 'p-2.5 rounded-input border-2 border-rose-500 bg-rose-50 text-rose-600 font-bold text-xs flex items-center justify-center gap-1';
+        btnJual.className = 'p-2.5 rounded-input border border-gray-200 bg-gray-50 text-gray-600 font-semibold text-xs flex items-center justify-center gap-1';
+        secJual.classList.add('hidden');
+        secKonsumsi.classList.remove('hidden');
+        secHarga.classList.add('hidden');
+        document.getElementById('saleHarga').value = 0;
+        modalTitle.textContent = 'Catat Minum Keluarga';
+        modalDesc.textContent = 'Hanya mengurangi liter batch (TANPA kurangi stok botol 200ml)';
+        btnSubmit.textContent = 'Simpan Minum Keluarga';
+        btnSubmit.className = 'w-full btn-touch bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-input shadow-md active:scale-98 transition';
+        saleKet.placeholder = 'Misal: Diminum Bapak & Anak';
+        if (!document.getElementById('saleLiterKonsumsi').value) {
+          document.getElementById('saleLiterKonsumsi').value = '0.2';
+        }
+      }
+    }
+
+    function addBotolQuick(n) {
+      const inp = document.getElementById('saleBotol');
+      inp.value = (parseInt(inp.value) || 0) + n;
+      updateSaleCalc();
+    }
+
+    function addStockQuick(n) {
+      const inp = document.getElementById('stockJumlah');
+      inp.value = (parseFloat(inp.value) || 0) + n;
+    }
+
+    // Ganti satuan saat pilih bahan di form stok
+    document.getElementById('stockBahanSelect').addEventListener('change', (e) => {
+      const db = loadLocalDB();
+      const selected = db.bahan.find(b => b.id === e.target.value);
+      if (selected) {
+        document.getElementById('stockSatuanLabel').textContent = selected.satuan;
+      }
+    });
+
+    // Update info batch saat dipilih
+    document.getElementById('batchSelect').addEventListener('change', (e) => {
+      const db = loadLocalDB();
+      const selected = (db.batches || []).find(b => b.id === e.target.value);
+      if (selected) {
+        document.getElementById('batchDetailInfo').textContent = `Sisa di batch ini: ${selected.sisa_liter} Liter (~${Math.floor(selected.sisa_liter / 0.2)} botol)`;
+      }
+    });
+
+    // ==================== REFRESH DASHBOARD ====================
+    function refreshDashboard() {
+      const db = loadLocalDB();
+      const batches = db.batches || [];
+      const bahan = db.bahan || [];
+      const transaksi = db.transaksi || [];
+
+      // 1. Sisa Jamu Siap Jual
+      const totalJamuLiters = batches.reduce((sum, b) => sum + (Number(b.sisa_liter) || 0), 0);
+      const botolItem = bahan.find(b => b.id === 'botol') || { stok: 0 };
+      const stockBotol = botolItem.stok;
+
+      // Produksi 7 hari terakhir
+      const now = new Date();
+      const weekAgo = new Date();
+      weekAgo.setDate(now.getDate() - 7);
+
+      const weeklyLiters = batches
+        .filter(b => new Date(b.tanggal) >= weekAgo)
+        .reduce((sum, b) => sum + (Number(b.total_liter) || 0), 0);
+
+      const totalTerjualBotol = transaksi
+        .filter(t => t.tipe === 'penjualan')
+        .reduce((sum, t) => sum + (Number(t.botol) || 0), 0);
+
+      const totalKonsumsiLiter = transaksi
+        .filter(t => t.tipe === 'konsumsi')
+        .reduce((sum, t) => sum + (Number(t.liter) || (Number(t.botol) * 0.2) || 0), 0);
+
+      // Render Dashboard
+      document.getElementById('weeklyLiters').textContent = `${weeklyLiters.toFixed(1)} Liter`;
+      document.getElementById('weeklyBottles').textContent = `~${Math.round(weeklyLiters / 0.2)} botol 200ml`;
+      document.getElementById('totalSoldText').textContent = `Terjual: ${totalTerjualBotol} btl | Keluarga: ${totalKonsumsiLiter.toFixed(1)} L`;
+
+      const targetWeekly = 30; // Target mingguan misal 30 Liter
+      const perc = Math.min(100, Math.round((weeklyLiters / targetWeekly) * 100));
+      document.getElementById('progressCircle').setAttribute('stroke-dasharray', `${perc}, 100`);
+      document.getElementById('progressText').textContent = `${perc}%`;
+
+      document.getElementById('stockJamu').textContent = `${totalJamuLiters.toFixed(1)} Liter`;
+      document.getElementById('stockJamuBotol').textContent = `~${Math.floor(totalJamuLiters / 0.2)} botol siap saji`;
+      document.getElementById('stockBotol').textContent = `${stockBotol} pcs`;
+
+      const statusBotolEl = document.getElementById('statusBotol');
+      if (stockBotol <= 10) {
+        statusBotolEl.textContent = 'Kritis! Segera beli';
+        statusBotolEl.className = 'text-[11px] text-warn mt-1 font-bold';
+      } else if (stockBotol <= 25) {
+        statusBotolEl.textContent = 'Mulai Menipis';
+        statusBotolEl.className = 'text-[11px] text-amber-600 mt-1 font-semibold';
+      } else {
+        statusBotolEl.textContent = 'Stok Aman';
+        statusBotolEl.className = 'text-[11px] text-emerald-600 mt-1 font-semibold';
+      }
+
+      // Status Bahan Menipis
+      const lowItems = bahan.filter(b => b.stok < b.threshold);
+      if (lowItems.length > 0) {
+        document.getElementById('lowStockCount').textContent = `${lowItems.length} Bahan Kritis!`;
+        document.getElementById('lowStockCount').className = 'text-sm font-bold text-warn mt-1';
+        document.getElementById('lowStockNames').textContent = lowItems.map(b => b.nama).join(', ');
+      } else {
+        document.getElementById('lowStockCount').textContent = 'Semua Aman';
+        document.getElementById('lowStockCount').className = 'text-sm font-bold text-emerald-600 mt-1';
+        document.getElementById('lowStockNames').textContent = 'Stok mencukupi produksi';
+      }
+
+      // Render Bahan List & Dropdown
+      renderBahanList(bahan);
+      populateStockSelect(bahan);
+      renderActiveBatches(batches);
+    }
+
+    function renderBahanList(bahanList) {
+      const container = document.getElementById('bahanListGrid');
+      container.innerHTML = '';
+
+      bahanList.forEach(item => {
+        const isLow = item.stok < item.threshold;
+        const row = document.createElement('div');
+        row.className = `flex justify-between items-center p-2.5 rounded-input ${isLow ? 'bg-red-50 border border-red-200' : 'bg-inputBg'}`;
+        row.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full ${isLow ? 'bg-warn' : 'bg-emerald-500'}"></span>
+            <div>
+              <p class="text-xs font-bold text-primary">${item.nama}</p>
+              <p class="text-[10px] text-gray-500">Batas aman: ${item.threshold} ${item.satuan}</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-sm font-bold ${isLow ? 'text-warn' : 'text-primary'}">${item.stok.toLocaleString('id-ID')}</span>
+            <span class="text-xs text-gray-600 font-medium">${item.satuan}</span>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      // Update petunjuk stok di form masak
+      const bKunyit = bahanList.find(b => b.id === 'kunyit');
+      const bJahe = bahanList.find(b => b.id === 'jahe');
+      const bAsam = bahanList.find(b => b.id === 'asam');
+      const bGula = bahanList.find(b => b.id === 'gula');
+
+      if (bKunyit) document.getElementById('stockKunyitHint').textContent = `Sisa: ${bKunyit.stok}g`;
+      if (bJahe) document.getElementById('stockJaheHint').textContent = `Sisa: ${bJahe.stok}g`;
+      if (bAsam) document.getElementById('stockAsamHint').textContent = `Sisa: ${bAsam.stok}g`;
+      if (bGula) document.getElementById('stockGulaHint').textContent = `Sisa: ${bGula.stok}g`;
+    }
+
+    function populateStockSelect(bahanList) {
+      const select = document.getElementById('stockBahanSelect');
+      const currentVal = select.value;
+      select.innerHTML = '';
+      bahanList.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.id;
+        opt.textContent = `${item.nama} (Stok: ${item.stok} ${item.satuan})`;
+        select.appendChild(opt);
+      });
+      if (currentVal) select.value = currentVal;
+      if (select.value) {
+        const sel = bahanList.find(b => b.id === select.value);
+        if (sel) document.getElementById('stockSatuanLabel').textContent = sel.satuan;
+      }
+    }
+
+    function renderActiveBatches(batches) {
+      const container = document.getElementById('batchActiveList');
+      container.innerHTML = '';
+
+      const activeBatches = batches.filter(b => b.sisa_liter > 0);
+      if (activeBatches.length === 0) {
+        container.innerHTML = '<p class="text-xs text-gray-400 text-center py-2">Belum ada batch jamu siap jual. Silakan masak jamu baru!</p>';
+      } else {
+        activeBatches.forEach(b => {
+          const btl = Math.floor(b.sisa_liter / 0.2);
+          const div = document.createElement('div');
+          div.className = 'flex justify-between items-center p-2.5 rounded-input bg-inputBg border border-gray-100';
+          div.innerHTML = `
+            <div>
+              <p class="text-xs font-bold text-primary">${b.id}</p>
+              <p class="text-[10px] text-gray-500">Tgl: ${formatDateIndo(b.tanggal)} | Total Masak: ${b.total_liter}L</p>
+            </div>
+            <div class="text-right">
+              <span class="text-sm font-bold text-accent">${b.sisa_liter} Liter</span>
+              <p class="text-[10px] text-gray-500 font-medium">~${btl} botol tersisa</p>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // Populate Dropdown Form Penjualan
+      const select = document.getElementById('batchSelect');
+      select.innerHTML = '';
+      if (activeBatches.length === 0) {
+        select.innerHTML = '<option value="">Tidak ada batch dengan stok tersedia</option>';
+        document.getElementById('batchDetailInfo').textContent = 'Silakan masak jamu terlebih dahulu.';
+      } else {
+        activeBatches.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b.id;
+          opt.textContent = `${b.id} (${formatDateIndo(b.tanggal)}) - Sisa: ${b.sisa_liter}L`;
+          select.appendChild(opt);
+        });
+        document.getElementById('batchDetailInfo').textContent = `Sisa di batch ini: ${activeBatches[0].sisa_liter} Liter (~${Math.floor(activeBatches[0].sisa_liter / 0.2)} botol)`;
+      }
+    }
+
+    // ==================== MODAL TOGGLES ====================
+    function openStockModal() {
+      refreshDashboard();
+      document.getElementById('stockJumlah').value = '';
+      document.getElementById('stockCatatan').value = '';
+      document.getElementById('stockModal').classList.remove('hidden');
+      document.getElementById('stockModal').classList.add('flex');
+    }
+    function closeStockModal() {
+      document.getElementById('stockModal').classList.add('hidden');
+      document.getElementById('stockModal').classList.remove('flex');
+    }
+
+    function openProductionModal() {
+      refreshDashboard();
+      document.getElementById('prodModal').classList.remove('hidden');
+      document.getElementById('prodModal').classList.add('flex');
+    }
+    function closeProductionModal() {
+      document.getElementById('prodModal').classList.add('hidden');
+      document.getElementById('prodModal').classList.remove('flex');
+    }
+
+    function openSalesModal() {
+      refreshDashboard();
+      document.getElementById('saleBotol').value = 1;
+      document.getElementById('saleLiterKonsumsi').value = 0.2;
+      selectSaleType('penjualan');
+      document.getElementById('salesModal').classList.remove('hidden');
+      document.getElementById('salesModal').classList.add('flex');
+    }
+    function closeSalesModal() {
+      document.getElementById('salesModal').classList.add('hidden');
+      document.getElementById('salesModal').classList.remove('flex');
+    }
+
+    function openHistoryModal() {
+      document.getElementById('historyModal').classList.remove('hidden');
+      document.getElementById('historyModal').classList.add('flex');
+      renderHistoryList();
+    }
+    function closeHistoryModal() {
+      document.getElementById('historyModal').classList.add('hidden');
+      document.getElementById('historyModal').classList.remove('flex');
+    }
+
+    function renderHistoryList() {
+      const db = loadLocalDB();
+      const list = [];
+
+      (db.batches || []).forEach(b => {
+        list.push({
+          id: b.id,
+          tipe: 'produksi',
+          tanggal: b.tanggal,
+          judul: `Masak Jamu (${b.id})`,
+          detail: `Hasil: ${b.total_liter} Liter (~${Math.round(b.total_liter / 0.2)} botol 200ml) | Sisa: ${b.sisa_liter}L`,
+          subdetail: (b.bahan_terpakai || []).map(p => `${p.nama || p.id}: ${p.qty}${p.satuan}`).join(', ')
+        });
+      });
+
+      (db.transaksi || []).forEach(t => {
+        const isJual = t.tipe === 'penjualan';
+        list.push({
+          id: t.id,
+          tipe: t.tipe,
+          tanggal: t.tanggal,
+          judul: isJual ? `Penjualan Jamu (${t.botol} Botol 200ml)` : `Konsumsi Keluarga (${t.liter} Liter - Tanpa Botol)`,
+          detail: `Dari ${t.batchId} (${t.liter} Liter)` + (isJual && t.harga_total ? ` - Rp ${Number(t.harga_total).toLocaleString('id-ID')}` : ' - Langsung Minum'),
+          subdetail: t.keterangan
+        });
+      });
+
+      (db.riwayat_stok || []).forEach(s => {
+        list.push({
+          id: s.id,
+          tipe: 'stok_masuk',
+          tanggal: s.tanggal,
+          judul: `Tambah Stok ${s.namaBahan}`,
+          detail: `+${s.jumlah} ${s.satuan}`,
+          subdetail: s.catatan || 'Belanja bahan baku'
+        });
+      });
+
+      list.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+
+      const listEl = document.getElementById('historyTimelineList');
+      listEl.innerHTML = '';
+      if (list.length === 0) {
+        listEl.innerHTML = '<p class="text-xs text-gray-400 text-center py-6">Belum ada riwayat aktivitas.</p>';
+        return;
+      }
+
+      list.forEach(item => {
+        let iconBg = 'bg-orange-100 text-accent';
+        let iconSvg = `
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
+        `;
+
+        if (item.tipe === 'produksi') {
+          iconBg = 'bg-amber-100 text-amber-700';
+          iconSvg = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+            </svg>
+          `;
+        } else if (item.tipe === 'konsumsi') {
+          iconBg = 'bg-rose-100 text-rose-600';
+          iconSvg = `
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+            </svg>
+          `;
+        } else if (item.tipe === 'stok_masuk') {
+          iconBg = 'bg-emerald-100 text-emerald-700';
+          iconSvg = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+          `;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'p-3 bg-inputBg rounded-card flex gap-3 items-start border border-gray-100';
+        card.innerHTML = `
+          <div class="w-8 h-8 rounded-full ${iconBg} flex items-center justify-center shrink-0 mt-0.5">
+            ${iconSvg}
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between items-baseline">
+              <h4 class="text-xs font-bold text-primary">${item.judul}</h4>
+              <span class="text-[10px] text-gray-400">${formatDateIndo(item.tanggal)}</span>
+            </div>
+            <p class="text-xs font-semibold text-gray-700 mt-0.5">${item.detail}</p>
+            ${item.subdetail ? `<p class="text-[11px] text-gray-500 mt-1">${item.subdetail}</p>` : ''}
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    // ==================== FORM SUBMITS (STANDALONE & SERVER SUPPORT) ====================
+
+    // 1. Submit Tambah Stok Bahan
+    document.getElementById('stockForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = document.getElementById('stockBahanSelect').value;
+      const jumlah = parseFloat(document.getElementById('stockJumlah').value);
+      const catatan = document.getElementById('stockCatatan').value;
+
+      if (!id || isNaN(jumlah) || jumlah <= 0) {
+        alert('⚠️ Masukkan jumlah stok yang valid');
+        return;
+      }
+
+      const db = loadLocalDB();
+      const item = db.bahan.find(b => b.id === id);
+      if (!item) return;
+
+      item.stok += jumlah;
+
+      if (!db.riwayat_stok) db.riwayat_stok = [];
+      db.riwayat_stok.unshift({
+        id: `LOG-${Date.now()}`,
+        tanggal: new Date().toISOString().slice(0, 10),
+        bahanId: item.id,
+        namaBahan: item.nama,
+        jumlah: jumlah,
+        satuan: item.satuan,
+        catatan: catatan || 'Penambahan Stok'
+      });
+
+      saveLocalDB(db);
+      alert(`✅ Berhasil! Stok ${item.nama} bertambah ${jumlah} ${item.satuan}. Total sekarang: ${item.stok} ${item.satuan}`);
+      closeStockModal();
+      refreshDashboard();
+    });
+
+    // 2. Submit Masak Jamu (Batch Baru)
+    document.getElementById('productionForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const tanggal = document.getElementById('prodDate').value;
+      const totalLiter = parseFloat(document.getElementById('prodLiter').value);
+
+      if (!tanggal || isNaN(totalLiter) || totalLiter <= 0) {
+        alert('⚠️ Harap isi tanggal dan hasil liter dengan benar');
+        return;
+      }
+
+      const pemakaian = [
+        { id: 'kunyit', nama: 'Kunyit', qty: parseFloat(document.getElementById('prodKunyit').value) || 0 },
+        { id: 'jahe', nama: 'Jahe', qty: parseFloat(document.getElementById('prodJahe').value) || 0 },
+        { id: 'asam', nama: 'Asam Jawa', qty: parseFloat(document.getElementById('prodAsam').value) || 0 },
+        { id: 'gula', nama: 'Gula Merah', qty: parseFloat(document.getElementById('prodGula').value) || 0 }
+      ];
+
+      const db = loadLocalDB();
+
+      // Cek apakah ada bahan yang stoknya kurang
+      for (const p of pemakaian) {
+        if (p.qty > 0) {
+          const item = db.bahan.find(b => b.id === p.id);
+          if (!item || item.stok < p.qty) {
+            alert(`⚠️ Stok ${item ? item.nama : p.id} tidak cukup!\nStok saat ini: ${item ? item.stok : 0} ${item ? item.satuan : ''}\nDibutuhkan: ${p.qty} ${item ? item.satuan : ''}`);
+            return;
+          }
+        }
+      }
+
+      // Kurangi stok bahan terpakai
+      for (const p of pemakaian) {
+        if (p.qty > 0) {
+          const item = db.bahan.find(b => b.id === p.id);
+          item.stok -= p.qty;
+          p.satuan = item.satuan;
+        }
+      }
+
+      // Buat Batch ID
+      const day = tanggal.replace(/-/g, '');
+      const count = (db.batches || []).filter(b => b.id.startsWith(`BATCH-${day}`)).length + 1;
+      const batchId = `BATCH-${day}-${String(count).padStart(2, '0')}`;
+
+      const newBatch = {
+        id: batchId,
+        tanggal: tanggal,
+        bahan_terpakai: pemakaian.filter(p => p.qty > 0),
+        total_liter: totalLiter,
+        sisa_liter: totalLiter,
+        catatan: 'Masak Jamu Kunyit Asem'
+      };
+
+      if (!db.batches) db.batches = [];
+      db.batches.unshift(newBatch);
+
+      saveLocalDB(db);
+      alert(`✅ Berhasil! ${batchId} dibuat dengan hasil ${totalLiter} Liter (~${Math.round(totalLiter / 0.2)} botol 200ml). Stok bahan telah terpotong.`);
+
+      // Reset form
+      document.getElementById('prodKunyit').value = '';
+      document.getElementById('prodJahe').value = '';
+      document.getElementById('prodAsam').value = '';
+      document.getElementById('prodGula').value = '';
+      document.getElementById('prodLiter').value = '';
+      closeProductionModal();
+      refreshDashboard();
+    });
+
+    // 3. Submit Penjualan / Konsumsi
+    document.getElementById('salesForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const tanggal = document.getElementById('saleDate').value;
+      const tipe = document.getElementById('saleType').value;
+      const batchId = document.getElementById('batchSelect').value;
+      const isJual = tipe === 'penjualan';
+
+      if (!batchId) {
+        alert('⚠️ Tidak ada batch yang dipilih atau stok jamu habis.');
+        return;
+      }
+
+      let botol = 0;
+      let literDibutuhkan = 0;
+      let hargaTotal = 0;
+
+      if (isJual) {
+        botol = parseInt(document.getElementById('saleBotol').value);
+        if (isNaN(botol) || botol <= 0) {
+          alert('⚠️ Masukkan jumlah botol yang valid untuk penjualan');
+          return;
+        }
+        literDibutuhkan = Number((botol * 0.2).toFixed(2));
+        hargaTotal = parseFloat(document.getElementById('saleHarga').value) || (botol * 5000);
+      } else {
+        literDibutuhkan = parseFloat(document.getElementById('saleLiterKonsumsi').value);
+        if (isNaN(literDibutuhkan) || literDibutuhkan <= 0) {
+          alert('⚠️ Masukkan jumlah jamu yang diminum (dalam Liter)');
+          return;
+        }
+        literDibutuhkan = Number(literDibutuhkan.toFixed(2));
+        botol = 0; // TIDAK MEMAKAI BOTOL 200ML
+        hargaTotal = 0;
+      }
+
+      const db = loadLocalDB();
+      const batch = (db.batches || []).find(b => b.id === batchId);
+      if (!batch) {
+        alert('⚠️ Batch tidak ditemukan.');
+        return;
+      }
+
+      if (batch.sisa_liter < literDibutuhkan) {
+        alert(`⚠️ Sisa jamu di batch ${batchId} tidak cukup!\nSisa jamu: ${batch.sisa_liter} Liter\nDibutuhkan: ${literDibutuhkan} Liter`);
+        return;
+      }
+
+      const botolItem = (db.bahan || []).find(b => b.id === 'botol');
+
+      // PENTING: Hanya cek & kurangi stok botol 200ml saat PENJUALAN!
+      if (isJual) {
+        if (!botolItem || botolItem.stok < botol) {
+          alert(`⚠️ Stok botol kosong 200ml tidak cukup!\nSisa botol: ${botolItem ? botolItem.stok : 0} pcs\nDibutuhkan: ${botol} pcs\n\nSilakan tekan menu "+ Stok Bahan" untuk menambah kemasan botol.`);
+          return;
+        }
+        botolItem.stok -= botol;
+      }
+
+      // Kurangi stok jamu cair pada batch
+      batch.sisa_liter = Number((batch.sisa_liter - literDibutuhkan).toFixed(2));
+
+      const keterangan = document.getElementById('saleKet').value;
+      const trx = {
+        id: `TRX-${Date.now()}`,
+        tanggal: tanggal,
+        tipe: tipe,
+        batchId: batchId,
+        botol: isJual ? botol : 0,
+        liter: literDibutuhkan,
+        harga_total: isJual ? hargaTotal : 0,
+        keterangan: keterangan || (isJual ? `Penjualan ${botol} botol 200ml` : `Konsumsi Keluarga (${literDibutuhkan} Liter - Tanpa Botol)`)
+      };
+
+      if (!db.transaksi) db.transaksi = [];
+      db.transaksi.unshift(trx);
+
+      saveLocalDB(db);
+
+      if (isJual) {
+        alert(`✅ Penjualan berhasil dicatat!\n- Batch: ${batchId}\n- Botol terjual: ${botol} pcs (0.2L/btl)\n- Sisa jamu di batch: ${batch.sisa_liter} Liter\n- Sisa fisik kemasan botol: ${botolItem.stok} pcs`);
+      } else {
+        alert(`✅ Konsumsi keluarga berhasil dicatat!\n- Batch: ${batchId}\n- Jamu diminum: ${literDibutuhkan} Liter\n- Sisa jamu di batch: ${batch.sisa_liter} Liter\n- Stok botol 200ml aman: ${botolItem ? botolItem.stok : 0} pcs (tidak berkurang)`);
+      }
+
+      closeSalesModal();
+      refreshDashboard();
+    });
+
+    // Load data awal
+    refreshDashboard();
+  </script>
+</body>
+</html>

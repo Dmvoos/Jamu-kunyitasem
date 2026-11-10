@@ -1,0 +1,42 @@
+{
+  "bahan": [
+    {
+      "id": "kunyit",
+      "nama": "Kunyit",
+      "satuan": "gram",
+      "stok": 0,
+      "threshold": 500
+    },
+    {
+      "id": "jahe",
+      "nama": "Jahe",
+      "satuan": "gram",
+      "stok": 0,
+      "threshold": 300
+    },
+    {
+      "id": "asam",
+      "nama": "Asam Jawa",
+      "satuan": "gram",
+      "stok": 0,
+      "threshold": 250
+    },
+    {
+      "id": "gula",
+      "nama": "Gula Merah",
+      "satuan": "gram",
+      "stok": 0,
+      "threshold": 500
+    },
+    {
+      "id": "botol",
+      "nama": "Botol 200ml",
+      "satuan": "pcs",
+      "stok": 0,
+      "threshold": 20
+    }
+  ],
+  "batches": [],
+  "transaksi": [],
+  "riwayat_stok": []
+}
