@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Pencatatan Jamu Kunyit Asem</title>
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1E3E4E',
+            accent: '#F9A826',
+            bgLight: '#F8F9FA',
+            inputBg: '#F1F3F5',
+            warn: '#E53E3E',
+            softGreen: '#38A169',
+          },
+          borderRadius: {
+            'card': '20px',
+            'input': '12px',
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          }
+        },
+      },
+    };
+  </script>
+  <!-- Custom Style -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="min-h-screen pb-12 flex justify-center text-gray-800">
+
+  <!-- Container Mobile Max-W -->
+  <div class="w-full max-w-md px-4 pt-4 pb-8 flex flex-col space-y-4">
+
+    <!-- 1. HEADER SAPAAN -->
+    <header class="flex justify-between items-start pt-2">
+      <div>
+        <h1 class="text-xl font-bold text-primary leading-tight">Halo, Ibu! 🌿</h1>
+        <p class="text-xs text-gray-500 font-medium" id="todayText">Memuat tanggal...</p>
+      </div>
+      <div class="bg-white p-2 rounded-full custom-shadow text-primary flex items-center justify-center">
+        <button onclick="App.resetDataSemua()" title="Reset Data Aplikasi" class="text-gray-400 hover:text-red-500 transition-colors p-0.5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. KARTU MENU FITUR UTAMA DI ATAS -->
+    <section>
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-sm font-bold text-primary uppercase tracking-wide">Menu Fitur Utama</h2>
+        <span class="text-xs text-accent font-semibold">Sentuh untuk buka</span>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <!-- Fitur 1: Tambah Stok Bahan Baku -->
+        <button onclick="App.openStockModal()" class="bg-white rounded-card p-2.5 custom-shadow flex flex-col items-center justify-center text-center active:scale-95 transition-transform border border-emerald-100 hover:border-emerald-300">
+          <div class="w-11 h-11 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-primary leading-tight">+ Stok Bahan</span>
+        </button>
+
+        <!-- Fitur 2: Masak / Produksi Jamu -->
+        <button onclick="App.openProductionModal()" class="bg-white rounded-card p-2.5 custom-shadow flex flex-col items-center justify-center text-center active:scale-95 transition-transform border border-amber-100 hover:border-amber-300">
+          <div class="w-11 h-11 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mb-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-primary leading-tight">Masak Jamu</span>
+        </button>
+
+        <!-- Fitur 3: Catat Penjualan / Konsumsi -->
+        <button onclick="App.openSalesModal()" class="bg-white rounded-card p-2.5 custom-shadow flex flex-col items-center justify-center text-center active:scale-95 transition-transform border border-orange-100 hover:border-orange-300">
+          <div class="w-11 h-11 rounded-full bg-orange-50 text-accent flex items-center justify-center mb-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-primary leading-tight">Jual / Minum</span>
+        </button>
+
+        <!-- Fitur 4: Riwayat Aktivitas Lengkap -->
+        <button onclick="App.openHistoryModal()" class="bg-white rounded-card p-2.5 custom-shadow flex flex-col items-center justify-center text-center active:scale-95 transition-transform border border-sky-100 hover:border-sky-300">
+          <div class="w-11 h-11 rounded-full bg-sky-50 text-sky-600 flex items-center justify-center mb-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-primary leading-tight">Riwayat</span>
+        </button>
+      </div>
+      <!-- Tombol Pintas Kelola Data / Koreksi -->
+      <div class="mt-2 text-right">
+        <button onclick="App.openManageDataModal()" class="text-[11px] font-semibold text-gray-500 hover:text-primary inline-flex items-center gap-1 bg-white px-2.5 py-1 rounded-full custom-shadow border border-gray-100">
+          ⚙️ Kelola / Koreksi Data (Edit & Hapus)
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. HIGHLIGHT CARD (Dark Teal dengan Circular Indicator) -->
+    <section class="bg-primary text-white rounded-card p-5 custom-shadow relative overflow-hidden">
+      <div class="flex justify-between items-center relative z-10">
+        <div>
+          <span class="text-xs font-medium text-amber-200 uppercase tracking-wider">Produksi Minggu Ini</span>
+          <p id="weeklyLiters" class="text-3xl font-bold mt-1">0 Liter</p>
+          <p class="text-xs text-gray-300 mt-1" id="weeklyBottles">~0 botol 200ml</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16">
+            <svg viewBox="0 0 36 36" class="w-full h-full transform -rotate-90">
+              <path
+                class="text-gray-600"
+                stroke-width="3.5"
+                stroke="currentColor"
+                fill="none"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                id="progressCircle"
+                class="text-accent"
+                stroke-width="3.8"
+                stroke-dasharray="0, 100"
+                stroke-linecap="round"
+                stroke="currentColor"
+                fill="none"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span id="progressText" class="text-xs font-bold text-white">0%</span>
+            </div>
+          </div>
+          <span class="text-[10px] text-gray-300 mt-1">Target Mingguan</span>
+        </div>
+      </div>
+      <!-- Tombol cepat -->
+      <div class="mt-4 pt-3 border-t border-gray-600 flex justify-between items-center">
+        <span class="text-xs text-gray-300" id="totalSoldText">Terjual: 0 botol</span>
+        <button onclick="App.openHistoryModal()" class="text-xs font-semibold text-accent underline flex items-center gap-1">
+          Lihat Riwayat &rarr;
+        </button>
+      </div>
+    </section>
+
+    <!-- 4. RINGKASAN HARI INI (Grid 2x2) -->
+    <section>
+      <h2 class="text-sm font-bold text-primary mb-2 uppercase tracking-wide">Ringkasan Hari Ini</h2>
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Kartu 1: Sisa Jamu Siap Jual -->
+        <div class="bg-white rounded-card p-4 custom-shadow flex flex-col justify-between">
+          <div>
+            <div class="w-8 h-8 rounded-full bg-teal-50 text-primary flex items-center justify-center mb-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+            </div>
+            <h3 class="text-xs font-medium text-gray-500">Jamu Siap Jual</h3>
+            <p id="stockJamu" class="text-lg font-bold text-primary mt-1">0 L</p>
+          </div>
+          <p id="stockJamuBotol" class="text-[11px] text-gray-400 mt-1 font-medium">~0 botol siap saji</p>
+        </div>
+
+        <!-- Kartu 2: Sisa Stok Botol 200ml -->
+        <div class="bg-white rounded-card p-4 custom-shadow flex flex-col justify-between">
+          <div>
+            <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+              </svg>
+            </div>
+            <h3 class="text-xs font-medium text-gray-500">Kemasan Botol</h3>
+            <p id="stockBotol" class="text-lg font-bold text-primary mt-1">0 pcs</p>
+          </div>
+          <p id="statusBotol" class="text-[11px] text-emerald-600 mt-1 font-semibold">Stok Aman</p>
+        </div>
+
+        <!-- Kartu 3: Status Stok Bahan Baku -->
+        <div class="bg-white rounded-card p-4 custom-shadow flex flex-col justify-between">
+          <div>
+            <div class="w-8 h-8 rounded-full bg-red-50 text-warn flex items-center justify-center mb-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+            </div>
+            <h3 class="text-xs font-medium text-gray-500">Bahan Menipis</h3>
+            <p id="lowStockCount" class="text-sm font-bold text-emerald-600 mt-1">Semua Aman</p>
+          </div>
+          <p id="lowStockNames" class="text-[10px] text-gray-400 mt-1 truncate">Stok mencukupi</p>
+        </div>
+
+        <!-- Kartu 4: Shortcut Masak Jamu Soft Orange -->
+        <button onclick="App.openProductionModal()" class="bg-[#FFF4E6] rounded-card p-4 custom-shadow flex flex-col justify-between text-left border border-amber-200 active:scale-95 transition-transform">
+          <div>
+            <div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center mb-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <h3 class="text-xs font-semibold text-accent">Mulai Masak</h3>
+            <p class="text-xs text-gray-600 mt-1 font-medium">Buat Batch Jamu Baru</p>
+          </div>
+          <span class="text-[11px] font-bold text-accent mt-2 flex items-center gap-1">
+            Buka Form &rarr;
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 4.5. GRAFIK KEUANGAN & KEUNTUNGAN DARI MODAL BELANJA -->
+    <section class="bg-white rounded-card p-4 custom-shadow">
+      <div class="flex justify-between items-center mb-2">
+        <div>
+          <h2 class="text-sm font-bold text-primary uppercase tracking-wide">Analisis Keuntungan</h2>
+          <p class="text-[11px] text-gray-500">Penjualan vs Modal Pembelian Bahan</p>
+        </div>
+        <div class="text-right">
+          <span id="chartProfitBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700">+Rp 0</span>
+        </div>
+      </div>
+
+      <!-- Ringkasan Angka Cepat -->
+      <div class="grid grid-cols-3 gap-2 py-2 mb-3 bg-inputBg rounded-input p-2.5 text-center">
+        <div>
+          <p class="text-[10px] text-gray-500 uppercase font-semibold">Total Modal</p>
+          <p id="statTotalModal" class="text-xs font-bold text-rose-600 mt-0.5">Rp 0</p>
+        </div>
+        <div>
+          <p class="text-[10px] text-gray-500 uppercase font-semibold">Penjualan</p>
+          <p id="statTotalJual" class="text-xs font-bold text-primary mt-0.5">Rp 0</p>
+        </div>
+        <div>
+          <p class="text-[10px] text-gray-500 uppercase font-semibold">Keuntungan</p>
+          <p id="statTotalUntung" class="text-xs font-bold text-emerald-600 mt-0.5">Rp 0</p>
+        </div>
+      </div>
+
+      <!-- Canvas Chart.js -->
+      <div class="relative w-full h-52">
+        <canvas id="profitChart"></canvas>
+      </div>
+      <p id="chartSummaryText" class="text-[11px] text-gray-500 text-center mt-2 italic">Belum ada transaksi pembelian bahan atau penjualan.</p>
+    </section>
+
+    <!-- 5. DAFTAR SISA STOK BAHAN BAKU REAL-TIME -->
+    <section class="bg-white rounded-card p-4 custom-shadow border border-emerald-50">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-sm font-bold text-primary uppercase tracking-wide">Stok Bahan Baku & Botol</h2>
+          <p class="text-[10px] text-gray-500">Total bahan baku tersedia</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="App.openBahanDashboardModal()" class="text-xs font-bold text-primary hover:text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+            📊 Buka Dashboard
+          </button>
+          <button onclick="App.openStockModal()" class="text-xs font-bold text-accent underline">+ Tambah</button>
+        </div>
+      </div>
+      <div id="bahanListGrid" class="space-y-2">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- 6. DAFTAR BATCH PRODUKSI AKTIF (SIAP JUAL) -->
+    <section class="bg-white rounded-card p-4 custom-shadow">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-sm font-bold text-primary uppercase tracking-wide">Batch Jamu Siap Jual</h2>
+        <button onclick="App.openSalesModal()" class="text-xs font-bold text-accent underline">Catat Jual</button>
+      </div>
+      <div id="batchActiveList" class="space-y-2">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+  </div> <!-- End Container -->
+
+
+  <!-- ==================== MODAL 1: TAMBAH STOK BAHAN BAKU ==================== -->
+  <div id="stockModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Tambah Stok Bahan</h2>
+          <p class="text-xs text-gray-500">Catat belanjaan bahan atau botol</p>
+        </div>
+        <button onclick="App.closeStockModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="stockForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">PILIH BAHAN / KEMASAN</label>
+          <select id="stockBahanSelect" class="w-full bg-inputBg rounded-input p-3 text-sm font-medium focus:ring-2 focus:ring-accent outline-none" required>
+            <!-- Diisi otomatis oleh JavaScript -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">JUMLAH TAMBAHAN</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" id="stockJumlah" min="1" step="any" placeholder="Misal: 1000 atau 50" class="flex-1 bg-inputBg rounded-input p-3 text-base font-semibold focus:ring-2 focus:ring-accent outline-none" required>
+            <span id="stockSatuanLabel" class="text-sm font-bold text-primary px-2">satuan</span>
+          </div>
+          <!-- Tombol pintas -->
+          <div class="flex gap-2 mt-2">
+            <button type="button" onclick="App.addStockQuick(100)" class="px-2.5 py-1 text-xs bg-gray-100 rounded-lg font-medium text-gray-600">+100</button>
+            <button type="button" onclick="App.addStockQuick(500)" class="px-2.5 py-1 text-xs bg-gray-100 rounded-lg font-medium text-gray-600">+500</button>
+            <button type="button" onclick="App.addStockQuick(1000)" class="px-2.5 py-1 text-xs bg-gray-100 rounded-lg font-medium text-gray-600">+1.000</button>
+            <button type="button" onclick="App.addStockQuick(50)" class="px-2.5 py-1 text-xs bg-gray-100 rounded-lg font-medium text-gray-600">+50 (Botol)</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TOTAL HARGA PEMBELIAN (RP) / MODAL</label>
+          <div class="flex items-center space-x-2">
+            <span class="text-sm font-bold text-gray-500 pl-1">Rp</span>
+            <input type="number" id="stockHargaBeli" min="0" step="500" placeholder="Misal: 15000" class="flex-1 bg-inputBg rounded-input p-3 text-base font-bold text-primary focus:ring-2 focus:ring-accent outline-none" required>
+          </div>
+          <p id="stockHargaUnitHint" class="text-[11px] text-gray-500 mt-1">Modal belanja langsung dicatat untuk hitung keuntungan.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">CATATAN (OPSIONAL)</label>
+          <input type="text" id="stockCatatan" placeholder="Contoh: Beli di Pasar Beringharjo" class="w-full bg-inputBg rounded-input p-3 text-sm focus:ring-2 focus:ring-accent outline-none">
+        </div>
+
+        <button type="submit" id="btnSubmitStock" class="w-full btn-touch bg-accent hover:bg-amber-500 text-white font-bold rounded-input shadow-md active:scale-98 transition">
+          Simpan Tambah Stok
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 2: PRODUKSI / MASAK JAMU ==================== -->
+  <div id="prodModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Masak Jamu (Batch Baru)</h2>
+          <p class="text-xs text-gray-500">Stok bahan terpotong sesuai resep masak ini</p>
+        </div>
+        <button onclick="App.closeProductionModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="productionForm" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TANGGAL MASAK</label>
+          <input type="date" id="prodDate" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-medium focus:ring-2 focus:ring-accent outline-none" required>
+        </div>
+
+        <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-input space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-amber-900">Bahan Terpakai untuk Masak Ini</span>
+            <span class="text-[10px] text-amber-700">(Tidak harus habis semua)</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-700">Kunyit (gram)</label>
+              <input type="number" id="prodKunyit" min="0" placeholder="0" class="w-full bg-white rounded-input p-2 mt-0.5 border border-gray-200 text-sm font-semibold focus:ring-2 focus:ring-accent outline-none" required>
+              <span id="stockKunyitHint" class="text-[10px] text-gray-500">Sisa: -</span>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-700">Jahe (gram)</label>
+              <input type="number" id="prodJahe" min="0" placeholder="0" class="w-full bg-white rounded-input p-2 mt-0.5 border border-gray-200 text-sm font-semibold focus:ring-2 focus:ring-accent outline-none" required>
+              <span id="stockJaheHint" class="text-[10px] text-gray-500">Sisa: -</span>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-700">Asam Jawa (gram)</label>
+              <input type="number" id="prodAsam" min="0" placeholder="0" class="w-full bg-white rounded-input p-2 mt-0.5 border border-gray-200 text-sm font-semibold focus:ring-2 focus:ring-accent outline-none" required>
+              <span id="stockAsamHint" class="text-[10px] text-gray-500">Sisa: -</span>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-700">Gula Merah (gram)</label>
+              <input type="number" id="prodGula" min="0" placeholder="0" class="w-full bg-white rounded-input p-2 mt-0.5 border border-gray-200 text-sm font-semibold focus:ring-2 focus:ring-accent outline-none" required>
+              <span id="stockGulaHint" class="text-[10px] text-gray-500">Sisa: -</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">HASIL BERSIH JAMU (LITER)</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" step="0.1" min="0.1" id="prodLiter" placeholder="Misal: 10 atau 15.5" class="flex-1 bg-inputBg rounded-input p-3 text-base font-bold text-primary focus:ring-2 focus:ring-accent outline-none" required>
+            <span class="text-sm font-bold text-primary px-2">Liter</span>
+          </div>
+          <p id="estBotolHasil" class="text-xs text-emerald-600 font-semibold mt-1">Setara ~0 botol 200ml</p>
+        </div>
+
+        <button type="submit" id="btnSubmitProd" class="w-full btn-touch bg-accent hover:bg-amber-500 text-white font-bold rounded-input shadow-md active:scale-98 transition">
+          Simpan Hasil Masak Jamu
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 3: PENJUALAN / KONSUMSI KELUARGA ==================== -->
+  <div id="salesModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 id="modalSalesTitle" class="text-lg font-bold text-primary">Catat Penjualan Jamu</h2>
+          <p id="modalSalesDesc" class="text-xs text-gray-500">Mengurangi sisa liter batch & botol 200ml</p>
+        </div>
+        <button onclick="App.closeSalesModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="salesForm" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TIPE PEMAKAIAN</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" id="btnTypeJual" onclick="App.selectSaleType('penjualan')" class="p-2.5 rounded-input border-2 border-accent bg-orange-50 text-accent font-bold text-xs flex items-center justify-center gap-1">
+              💰 Penjualan (Jual)
+            </button>
+            <button type="button" id="btnTypeKonsumsi" onclick="App.selectSaleType('konsumsi')" class="p-2.5 rounded-input border border-gray-200 bg-gray-50 text-gray-600 font-semibold text-xs flex items-center justify-center gap-1">
+              ❤️ Minum Keluarga
+            </button>
+          </div>
+          <input type="hidden" id="saleType" value="penjualan">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TANGGAL TRANSAKSI</label>
+          <input type="date" id="saleDate" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-medium focus:ring-2 focus:ring-accent outline-none" required>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">PILIH BATCH PRODUKSI JAMU</label>
+          <select id="batchSelect" class="w-full bg-inputBg rounded-input p-2.5 text-xs font-semibold text-primary focus:ring-2 focus:ring-accent outline-none" required>
+            <!-- Diisi otomatis JavaScript -->
+          </select>
+          <p id="batchDetailInfo" class="text-[11px] text-gray-500 mt-1">Sisa di batch ini: -</p>
+        </div>
+
+        <!-- Input Khusus Penjualan: Pakai Kemasan Botol 200ml -->
+        <div id="sectionInputJual">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">JUMLAH BOTOL 200ML TERJUAL</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" id="saleBotol" min="1" placeholder="1" class="flex-1 bg-inputBg rounded-input p-3 text-lg font-bold text-primary focus:ring-2 focus:ring-accent outline-none">
+            <span class="text-sm font-bold text-primary px-1">Botol</span>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <button type="button" onclick="App.addBotolQuick(1)" class="flex-1 py-1 text-xs bg-gray-100 rounded-lg font-semibold text-gray-700 active:bg-accent active:text-white">+1</button>
+            <button type="button" onclick="App.addBotolQuick(5)" class="flex-1 py-1 text-xs bg-gray-100 rounded-lg font-semibold text-gray-700 active:bg-accent active:text-white">+5</button>
+            <button type="button" onclick="App.addBotolQuick(10)" class="flex-1 py-1 text-xs bg-gray-100 rounded-lg font-semibold text-gray-700 active:bg-accent active:text-white">+10</button>
+          </div>
+          <p id="literCalcInfo" class="text-[11px] text-amber-600 font-semibold mt-1">Mengurangi 0.2 Liter dari batch & 1 botol kemasan</p>
+        </div>
+
+        <!-- Input Khusus Konsumsi Keluarga: Minum Langsung (Liter / Gelas, TANPA Botol) -->
+        <div id="sectionInputKonsumsi" class="hidden">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">JUMLAH JAMU DIMINUM (LITER)</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" id="saleLiterKonsumsi" min="0.1" step="0.1" placeholder="0.2" class="flex-1 bg-inputBg rounded-input p-3 text-lg font-bold text-primary focus:ring-2 focus:ring-rose-500 outline-none">
+            <span class="text-sm font-bold text-rose-700 px-1">Liter</span>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5 mt-2">
+            <button type="button" onclick="App.setLiterKonsumsi(0.2)" class="py-1 text-[11px] bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-semibold border border-rose-200">1 Gelas<br>(0.2 L)</button>
+            <button type="button" onclick="App.setLiterKonsumsi(0.4)" class="py-1 text-[11px] bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-semibold border border-rose-200">2 Gelas<br>(0.4 L)</button>
+            <button type="button" onclick="App.setLiterKonsumsi(0.5)" class="py-1 text-[11px] bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-semibold border border-rose-200">1 Teko<br>(0.5 L)</button>
+            <button type="button" onclick="App.setLiterKonsumsi(1.0)" class="py-1 text-[11px] bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-semibold border border-rose-200">1 Liter<br>(1.0 L)</button>
+          </div>
+          <div class="mt-2.5 p-2.5 bg-emerald-50 rounded-lg border border-emerald-200 flex items-start gap-2">
+            <span class="text-sm">🛡️</span>
+            <p class="text-[11px] text-emerald-800 font-medium leading-snug">
+              <strong>Stok botol 200ml aman (tidak berkurang)</strong>, karena diminum langsung pakai gelas/cangkir sendiri.
+            </p>
+          </div>
+        </div>
+
+        <div id="sectionHargaJual">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TOTAL HARGA PENJUALAN (RP)</label>
+          <input type="number" id="saleHarga" min="0" step="500" placeholder="Rp 0" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-bold text-primary focus:ring-2 focus:ring-accent outline-none">
+          <span class="text-[10px] text-gray-400">Default perkiraan Rp 5.000 / botol</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">CATATAN</label>
+          <input type="text" id="saleKet" placeholder="Misal: Pesanan Bu Joko" class="w-full bg-inputBg rounded-input p-2.5 text-xs focus:ring-2 focus:ring-accent outline-none">
+        </div>
+
+        <button type="submit" id="btnSubmitSale" class="w-full btn-touch bg-accent hover:bg-amber-600 text-white font-bold rounded-input shadow-md active:scale-98 transition">
+          Simpan Penjualan
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 4: RIWAYAT AKTIVITAS ==================== -->
+  <div id="historyModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow max-h-[92vh] flex flex-col">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Riwayat Aktivitas</h2>
+          <p class="text-xs text-gray-500">Produksi, penjualan, dan stok</p>
+        </div>
+        <button onclick="App.closeHistoryModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="overflow-y-auto flex-1 pr-1 space-y-3" id="historyTimelineList">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 4.5: DASHBOARD KHUSUS STOK BAHAN BAKU & RIWAYAT PEMBELIAN ==================== -->
+  <div id="bahanDashboardModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-md rounded-card p-5 custom-shadow max-h-[94vh] flex flex-col">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Dashboard Stok Bahan Baku</h2>
+          <p class="text-xs text-gray-500">Total bahan & riwayat khusus belanja</p>
+        </div>
+        <button onclick="App.closeBahanDashboardModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Tab View Dashboard Bahan -->
+      <div class="flex border-b border-gray-200 mb-3 text-xs font-bold">
+        <button type="button" id="tabBahanTotalBtn" onclick="App.switchBahanTab('total')" class="flex-1 py-2 text-emerald-600 border-b-2 border-emerald-600">
+          📦 Total Bahan Baku
+        </button>
+        <button type="button" id="tabBahanHistoryBtn" onclick="App.switchBahanTab('history')" class="flex-1 py-2 text-gray-400 hover:text-primary">
+          📜 Riwayat Pembelian (Bisa Dihapus)
+        </button>
+      </div>
+
+      <!-- Filter Bahan Khusus Riwayat -->
+      <div id="bahanFilterContainer" class="hidden mb-3">
+        <label class="block text-[11px] font-semibold text-gray-600 mb-1">FILTER BAHAN TERTENTU:</label>
+        <select id="bahanFilterSelect" onchange="App.filterBahanHistory()" class="w-full bg-inputBg rounded-input p-2 text-xs font-semibold text-primary outline-none">
+          <option value="all">Semua Bahan Baku & Botol</option>
+          <option value="kunyit">Kunyit</option>
+          <option value="jahe">Jahe</option>
+          <option value="asam">Asam Jawa</option>
+          <option value="gula">Gula Merah</option>
+          <option value="botol">Botol 200ml</option>
+        </select>
+      </div>
+
+      <!-- Konten Tab 1: Total Bahan Baku & Botol -->
+      <div id="viewBahanTotal" class="overflow-y-auto flex-1 pr-1 space-y-2.5">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Konten Tab 2: Riwayat Khusus Pembelian Bahan (Bisa Dihapus Sesuai Penambahan) -->
+      <div id="viewBahanHistory" class="hidden overflow-y-auto flex-1 pr-1 space-y-2.5">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="pt-3 border-t border-gray-100 flex justify-between items-center mt-2">
+        <button type="button" onclick="App.closeBahanDashboardModal(); App.openStockModal()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-input shadow transition">
+          + Tambah Belanja Bahan Baku
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 5: EDIT STOK BAHAN BAKU / BOTOL SECARA LANGSUNG ==================== -->
+  <div id="editBahanModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Edit Stok Bahan</h2>
+          <p id="editBahanNamaDesc" class="text-xs text-gray-500">Koreksi langsung jumlah stok</p>
+        </div>
+        <button onclick="App.closeEditBahanModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="editBahanForm" class="space-y-4">
+        <input type="hidden" id="editBahanId">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">JUMLAH STOK FISIK SAAT INI</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" id="editBahanStok" min="0" step="any" class="flex-1 bg-inputBg rounded-input p-3 text-lg font-bold text-primary focus:ring-2 focus:ring-accent outline-none" required>
+            <span id="editBahanSatuan" class="text-sm font-bold text-primary px-2">satuan</span>
+          </div>
+          <span class="text-[11px] text-gray-400">Gunakan jika hitungan fisik berbeda karena tumpah / selisih.</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">BATAS MINIMAL AMAN (THRESHOLD)</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" id="editBahanThreshold" min="0" step="any" class="flex-1 bg-inputBg rounded-input p-2.5 text-sm font-medium focus:ring-2 focus:ring-accent outline-none" required>
+            <span id="editBahanThreshSatuan" class="text-xs font-semibold text-gray-500 px-2">satuan</span>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full btn-touch bg-primary hover:bg-slate-800 text-white font-bold rounded-input shadow-md active:scale-98 transition">
+          Simpan Koreksi Bahan
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 6: EDIT BATCH PRODUKSI JAMU ==================== -->
+  <div id="editBatchModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Edit Batch Jamu</h2>
+          <p id="editBatchTitleDesc" class="text-xs text-gray-500">Koreksi sisa jamu siap jual</p>
+        </div>
+        <button onclick="App.closeEditBatchModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="editBatchForm" class="space-y-4">
+        <input type="hidden" id="editBatchId">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TANGGAL MASAK</label>
+          <input type="date" id="editBatchDate" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-medium focus:ring-2 focus:ring-accent outline-none" required>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TOTAL LITER DIPRODUKSI</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" step="0.1" min="0.1" id="editBatchTotalLiter" class="flex-1 bg-inputBg rounded-input p-2.5 text-base font-bold text-primary focus:ring-2 focus:ring-accent outline-none" required>
+            <span class="text-sm font-bold text-primary px-2">Liter</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">SISA JAMU SAAT INI (LITER)</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" step="0.1" min="0" id="editBatchSisaLiter" class="flex-1 bg-inputBg rounded-input p-3 text-lg font-bold text-primary focus:ring-2 focus:ring-accent outline-none" required>
+            <span class="text-sm font-bold text-primary px-2">Liter</span>
+          </div>
+          <span class="text-[11px] text-gray-400">Atur sisa jamu yang masih ada di teko / kulkas.</span>
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="App.hapusBatchAktif()" class="flex-1 py-3 bg-red-50 text-red-600 font-bold text-xs rounded-input hover:bg-red-100 border border-red-200">
+            🗑️ Hapus Batch
+          </button>
+          <button type="submit" class="flex-2 w-full py-3 bg-primary text-white font-bold text-xs rounded-input hover:bg-slate-800">
+            Simpan Perubahan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 7: KELOLA & KOREKSI SEMUA DATA (PENJUALAN, RIWAYAT, PRODUKSI) ==================== -->
+  <div id="manageDataModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow max-h-[92vh] flex flex-col">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Kelola & Koreksi Data</h2>
+          <p class="text-xs text-gray-500">Edit atau hapus transaksi & aktivitas</p>
+        </div>
+        <button onclick="App.closeManageDataModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Tab Kategori Data -->
+      <div class="flex border-b border-gray-200 mb-3 text-xs font-bold">
+        <button type="button" id="tabBtnTrx" onclick="App.switchManageTab('transaksi')" class="flex-1 py-2 text-accent border-b-2 border-accent">
+          Penjualan / Minum
+        </button>
+        <button type="button" id="tabBtnStok" onclick="App.switchManageTab('riwayat_stok')" class="flex-1 py-2 text-gray-400 hover:text-primary">
+          Beli Bahan (Modal)
+        </button>
+      </div>
+
+      <!-- Daftar List Manage -->
+      <div class="overflow-y-auto flex-1 pr-1 space-y-2.5" id="manageItemsList">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 8: EDIT TRANSAKSI PENJUALAN / MINUM ==================== -->
+  <div id="editTrxModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Edit Transaksi</h2>
+          <p id="editTrxSubTitle" class="text-xs text-gray-500">Koreksi penjualan / minum</p>
+        </div>
+        <button onclick="App.closeEditTrxModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="editTrxForm" class="space-y-3">
+        <input type="hidden" id="editTrxId">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TANGGAL</label>
+          <input type="date" id="editTrxDate" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-medium focus:ring-2 focus:ring-accent outline-none" required>
+        </div>
+
+        <div id="secEditTrxBotol">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">JUMLAH BOTOL 200ML</label>
+          <input type="number" id="editTrxBotol" min="0" class="w-full bg-inputBg rounded-input p-2.5 text-base font-bold text-primary focus:ring-2 focus:ring-accent outline-none">
+        </div>
+
+        <div id="secEditTrxLiter">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TOTAL LITER DIPAKAI</label>
+          <input type="number" step="0.1" min="0.1" id="editTrxLiter" class="w-full bg-inputBg rounded-input p-2.5 text-base font-bold text-primary focus:ring-2 focus:ring-accent outline-none">
+        </div>
+
+        <div id="secEditTrxHarga">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TOTAL HARGA PENJUALAN (RP)</label>
+          <input type="number" min="0" step="500" id="editTrxHarga" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-bold text-primary focus:ring-2 focus:ring-accent outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">CATATAN</label>
+          <input type="text" id="editTrxKet" class="w-full bg-inputBg rounded-input p-2.5 text-xs focus:ring-2 focus:ring-accent outline-none">
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="App.hapusTransaksiAktif()" class="flex-1 py-3 bg-red-50 text-red-600 font-bold text-xs rounded-input hover:bg-red-100 border border-red-200">
+            🗑️ Hapus
+          </button>
+          <button type="submit" class="flex-2 w-full py-3 bg-primary text-white font-bold text-xs rounded-input hover:bg-slate-800">
+            Simpan Koreksi
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 9: EDIT PEMBELIAN BAHAN (MODAL) ==================== -->
+  <div id="editStokMasukModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-sm rounded-card p-5 custom-shadow">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="text-lg font-bold text-primary">Edit Pembelian Modal</h2>
+          <p id="editStokMasukTitleDesc" class="text-xs text-gray-500">Koreksi belanja bahan baku</p>
+        </div>
+        <button onclick="App.closeEditStokMasukModal()" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="editStokMasukForm" class="space-y-3">
+        <input type="hidden" id="editStokMasukId">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TANGGAL BELANJA</label>
+          <input type="date" id="editStokMasukDate" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-medium focus:ring-2 focus:ring-accent outline-none" required>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">JUMLAH BARANG DIBELI</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" id="editStokMasukJumlah" step="any" min="0" class="flex-1 bg-inputBg rounded-input p-2.5 text-base font-bold text-primary focus:ring-2 focus:ring-accent outline-none" required>
+            <span id="editStokMasukSatuan" class="text-sm font-bold text-primary px-2">satuan</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">TOTAL HARGA PEMBELIAN (RP) / MODAL</label>
+          <input type="number" min="0" step="500" id="editStokMasukHarga" class="w-full bg-inputBg rounded-input p-2.5 text-sm font-bold text-primary focus:ring-2 focus:ring-accent outline-none" required>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">CATATAN</label>
+          <input type="text" id="editStokMasukCatatan" class="w-full bg-inputBg rounded-input p-2.5 text-xs focus:ring-2 focus:ring-accent outline-none">
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="App.hapusStokMasukAktif()" class="flex-1 py-3 bg-red-50 text-red-600 font-bold text-xs rounded-input hover:bg-red-100 border border-red-200">
+            🗑️ Hapus
+          </button>
+          <button type="submit" class="flex-2 w-full py-3 bg-primary text-white font-bold text-xs rounded-input hover:bg-slate-800">
+            Simpan Perubahan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modular Scripts -->
+  <script src="js/mock.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

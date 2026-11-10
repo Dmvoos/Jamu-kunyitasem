@@ -1,0 +1,19 @@
+/* docs/css/style.css */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #F8F9FA;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.custom-shadow {
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.modal-backdrop {
+  background-color: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.btn-touch {
+  min-height: 48px;
+}

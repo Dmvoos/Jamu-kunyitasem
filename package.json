@@ -1,0 +1,20 @@
+{
+  "name": "jamu-kunyitasem",
+  "version": "2.0.0",
+  "description": "Aplikasi Pencatatan Stok, Produksi, dan Penjualan Jamu Kunyit Asem",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "fs-extra": "^11.2.0",
+    "googleapis": "^140.0.1"
+  },
+  "author": "Roger",
+  "license": "ISC"
+}
