@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const sheetsService = require('../services/sheets');
 
-const DB_FILE = path.join(__dirname, '../../database.json');
+const DB_FILE = path.join(__dirname, '../data/database.json');
 
 function readDB() {
   try {
@@ -161,6 +161,34 @@ router.post('/penjualan', async (req, res) => {
   } catch (e) {}
 
   res.json({ success: true, transaksi: trx });
+});
+
+// 5. Sinkronisasi Edit / Hapus langsung dari UI
+router.post('/sync', (req, res) => {
+  const newDb = req.body;
+  if (!newDb || !Array.isArray(newDb.bahan)) {
+    return res.status(400).json({ error: 'Format database tidak valid' });
+  }
+  writeDB(newDb);
+  res.json({ success: true });
+});
+
+// 6. Reset semua data ke 0
+router.post('/reset', (req, res) => {
+  const emptyDb = {
+    bahan: [
+      { id: 'kunyit', nama: 'Kunyit', satuan: 'gram', stok: 0, threshold: 500 },
+      { id: 'jahe', nama: 'Jahe', satuan: 'gram', stok: 0, threshold: 300 },
+      { id: 'asam', nama: 'Asam Jawa', satuan: 'gram', stok: 0, threshold: 250 },
+      { id: 'gula', nama: 'Gula Merah', satuan: 'gram', stok: 0, threshold: 500 },
+      { id: 'botol', nama: 'Botol 200ml', satuan: 'pcs', stok: 0, threshold: 20 }
+    ],
+    batches: [],
+    transaksi: [],
+    riwayat_stok: []
+  };
+  writeDB(emptyDb);
+  res.json({ success: true, db: emptyDb });
 });
 
 module.exports = router;

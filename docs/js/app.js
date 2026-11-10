@@ -210,7 +210,7 @@ const App = {
 
         item.stok = stokBaru;
         if (!isNaN(thresholdBaru) && thresholdBaru >= 0) item.threshold = thresholdBaru;
-        Api.saveDirectDB(db);
+        await Api.saveDirectDB(db);
 
         alert(`✅ Stok ${item.nama} berhasil diperbarui.`);
         this.closeEditBahanModal();
@@ -235,7 +235,7 @@ const App = {
         batch.tanggal = tgl;
         batch.total_liter = totalLiter;
         batch.sisa_liter = Number(sisaLiter.toFixed(2));
-        Api.saveDirectDB(db);
+        await Api.saveDirectDB(db);
 
         alert(`✅ Batch ${id} berhasil diperbarui.`);
         this.closeEditBatchModal();
@@ -266,7 +266,7 @@ const App = {
         }
         trx.liter = liter;
         trx.keterangan = ket;
-        Api.saveDirectDB(db);
+        await Api.saveDirectDB(db);
 
         alert('✅ Transaksi berhasil diperbarui.');
         this.closeEditTrxModal();
@@ -293,7 +293,7 @@ const App = {
         item.jumlah = jml;
         item.harga_beli = harga;
         item.catatan = cat;
-        Api.saveDirectDB(db);
+        await Api.saveDirectDB(db);
 
         alert('✅ Catatan pembelian modal berhasil diperbarui.');
         this.closeEditStokMasukModal();
@@ -451,7 +451,7 @@ const App = {
 
     // Hapus dari riwayat stok
     db.riwayat_stok = db.riwayat_stok.filter(s => s.id !== logId);
-    Api.saveDirectDB(db);
+    await Api.saveDirectDB(db);
 
     alert(`🗑️ Riwayat berhasil dihapus!\nStok ${logItem.namaBahan} telah disesuaikan menjadi ${targetBahan ? targetBahan.stok : 0} ${logItem.satuan}.`);
     
@@ -555,7 +555,7 @@ const App = {
     if (!confirm(`Apakah Anda yakin ingin MENGHAPUS batch ${id}?`)) return;
     const db = await Api.getDashboard();
     db.batches = (db.batches || []).filter(b => b.id !== id);
-    Api.saveDirectDB(db);
+    await Api.saveDirectDB(db);
     alert(`🗑️ Batch ${id} berhasil dihapus.`);
     this.closeEditBatchModal();
     await this.refresh();
@@ -685,7 +685,7 @@ const App = {
     if (!confirm('Apakah Anda yakin ingin MENGHAPUS catatan transaksi ini?')) return;
     const db = await Api.getDashboard();
     db.transaksi = (db.transaksi || []).filter(t => t.id !== id);
-    Api.saveDirectDB(db);
+    await Api.saveDirectDB(db);
     alert('🗑️ Catatan transaksi berhasil dihapus.');
     await this.renderManageItemsList();
     await this.refresh();
@@ -722,17 +722,17 @@ const App = {
     if (!confirm('Apakah Anda yakin ingin MENGHAPUS catatan belanja modal ini?')) return;
     const db = await Api.getDashboard();
     db.riwayat_stok = (db.riwayat_stok || []).filter(s => s.id !== id);
-    Api.saveDirectDB(db);
+    await Api.saveDirectDB(db);
     alert('🗑️ Catatan belanja berhasil dihapus.');
     await this.renderManageItemsList();
     await this.refresh();
   },
 
-  resetDataSemua() {
+  async resetDataSemua() {
     if (confirm('Apakah Ibu yakin ingin mereset semua data kembali ke 0 (stok awal kosong)?')) {
-      MockDB.reset();
+      await Api.resetAll();
       alert('Data aplikasi berhasil direset bersih ke 0!');
-      this.refresh();
+      await this.refresh();
     }
   }
 };

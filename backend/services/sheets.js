@@ -1,7 +1,7 @@
 // backend/services/sheets.js - Google Sheets Database Service
 const { google } = require('googleapis');
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 class SheetsService {
   constructor() {

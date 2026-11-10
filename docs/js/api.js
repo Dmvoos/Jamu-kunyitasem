@@ -46,7 +46,9 @@ const Api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    return await res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Gagal menyimpan stok');
+    return data;
   },
 
   async catatProduksi(payload) {
@@ -90,7 +92,9 @@ const Api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    return await res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Gagal mencatat produksi');
+    return { ...data, batchId: data.batchId || (data.batch && data.batch.id) };
   },
 
   async catatPenjualan(payload) {
@@ -134,11 +138,31 @@ const Api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    return await res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Gagal mencatat penjualan');
+    return data;
   },
 
   // Operasi CRUD Modifikasi Langsung (Edit / Hapus)
-  saveDirectDB(db) {
+  async saveDirectDB(db) {
     MockDB.save(db);
+    if (!this.isGitHubPages && this.apiBase) {
+      try {
+        await fetch(`${this.apiBase}/api/sync`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(db)
+        });
+      } catch (e) {}
+    }
+  },
+
+  async resetAll() {
+    MockDB.reset();
+    if (!this.isGitHubPages && this.apiBase) {
+      try {
+        await fetch(`${this.apiBase}/api/reset`, { method: 'POST' });
+      } catch (e) {}
+    }
   }
 };

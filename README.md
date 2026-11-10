@@ -12,21 +12,28 @@ jamu-kunyitasem/
 ├── docs/                       # 📁 FOLDER INI YANG DI-HOST DI GITHUB PAGES
 │   ├── index.html              # Struktur UI (Mobile-first)
 │   ├── css/
-│   │   └── style.css           # Styling kustom
+│   │   └── style.css           # Styling kustom & background tradisional
 │   ├── js/
 │   │   ├── app.js              # Entry point (inisialisasi aplikasi & navigasi)
 │   │   ├── api.js              # Logika Fetch API (Otomatis switch ke Mock saat di GitHub)
 │   │   ├── mock.js             # Data Dummy / LocalStorage (Demo di GitHub Pages)
-│   │   └── ui.js               # Logika manipulasi DOM (render kartu, timeline, modal)
+│   │   └── ui.js               # Logika manipulasi DOM (render kartu, grafik, timeline, modal)
 │   └── assets/
-│       └── icons/              # File ikon SVG
+│       ├── icons/              # File ikon SVG (botol-200ml.svg)
+│       └── images/             # Aset gambar (jamu-bg.jpg, botol-200ml.jpg)
 │
 ├── backend/                    # 📁 FOLDER SERVER (Express & Google Sheets)
 │   ├── server.js               # Entry point Express.js
+│   ├── data/
+│   │   └── database.json       # Penyimpanan JSON lokal
 │   ├── routes/
-│   │   └── api.js              # Endpoint (/api/stok, /api/produksi, /api/penjualan)
+│   │   └── api.js              # Endpoint (/api/stok, /api/produksi, /api/penjualan, /api/sync, /api/reset)
 │   └── services/
 │       └── sheets.js           # Logika baca/tulis ke Google Sheets
+│
+├── design/                     # 📁 Dokumentasi & referensi desain UI/UX
+│   ├── desain.md
+│   └── ui-reference.jpg
 │
 ├── .env                        # 🔒 Kredensial Google API (Jangan di-push)
 ├── .gitignore                  # Filter file rahasia
